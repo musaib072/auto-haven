@@ -228,9 +228,14 @@ const Admin = () => {
             </h1>
             <p className="text-muted-foreground text-sm mt-1">Add, edit, and remove your car listings</p>
           </div>
-          <Button onClick={() => { resetForm(); setShowForm(true); }} className="bg-accent text-accent-foreground hover:bg-accent/90">
-            <Plus className="h-4 w-4 mr-2" /> Add Car
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={() => { resetForm(); setShowForm(true); }} className="bg-accent text-accent-foreground hover:bg-accent/90">
+              <Plus className="h-4 w-4 mr-2" /> Add Car
+            </Button>
+            <Button variant="outline" size="icon" onClick={handleLogout} title="Sign out">
+              <LogOut className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
 
         {/* Form */}
