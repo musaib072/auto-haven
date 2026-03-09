@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Plus, Pencil, Trash2, Upload, X, Image } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Plus, Pencil, Trash2, Upload, X, Image, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,6 +12,7 @@ import { Footer } from "@/components/Footer";
 import { bodyTypes, fuelTypes, transmissionTypes } from "@/data/cars";
 import { useDbCars, useAddCar, useUpdateCar, useDeleteCar, uploadCarPhoto } from "@/hooks/useCars";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const emptyForm = {
   make: "", model: "", year: "", price: "", mileage: "", body_type: "Sedan",
