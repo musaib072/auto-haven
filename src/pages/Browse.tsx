@@ -27,7 +27,7 @@ const Browse = () => {
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const filtered = useMemo(() => {
-    let result = cars.filter((car) => {
+    let result = allCars.filter((car) => {
       const q = search.toLowerCase();
       const matchesSearch = !q || `${car.make} ${car.model} ${car.year} ${car.color} ${car.bodyType}`.toLowerCase().includes(q);
       const matchesBody = bodyType === "all" || car.bodyType === bodyType;
