@@ -14,7 +14,78 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      cars: {
+        Row: {
+          body_type: string
+          color: string | null
+          created_at: string
+          description: string | null
+          engine: string | null
+          features: string[] | null
+          fuel_type: string
+          gallery: string[] | null
+          id: string
+          image_url: string | null
+          is_featured: boolean
+          location: string | null
+          make: string
+          mileage: number
+          model: string
+          price: number
+          seller_name: string | null
+          seller_phone: string | null
+          transmission: string
+          updated_at: string
+          year: number
+        }
+        Insert: {
+          body_type?: string
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          engine?: string | null
+          features?: string[] | null
+          fuel_type?: string
+          gallery?: string[] | null
+          id?: string
+          image_url?: string | null
+          is_featured?: boolean
+          location?: string | null
+          make: string
+          mileage?: number
+          model: string
+          price: number
+          seller_name?: string | null
+          seller_phone?: string | null
+          transmission?: string
+          updated_at?: string
+          year: number
+        }
+        Update: {
+          body_type?: string
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          engine?: string | null
+          features?: string[] | null
+          fuel_type?: string
+          gallery?: string[] | null
+          id?: string
+          image_url?: string | null
+          is_featured?: boolean
+          location?: string | null
+          make?: string
+          mileage?: number
+          model?: string
+          price?: number
+          seller_name?: string | null
+          seller_phone?: string | null
+          transmission?: string
+          updated_at?: string
+          year?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
