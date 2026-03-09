@@ -9,6 +9,7 @@ import CarDetail from "./pages/CarDetail";
 import SellCar from "./pages/SellCar";
 import HowItWorks from "./pages/HowItWorks";
 import Service from "./pages/Service";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
