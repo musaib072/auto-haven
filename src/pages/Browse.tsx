@@ -8,9 +8,14 @@ import { Slider } from "@/components/ui/slider";
 import { CarCard } from "@/components/CarCard";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { cars, bodyTypes, fuelTypes, transmissionTypes, makes } from "@/data/cars";
+import { cars as staticCars, bodyTypes, fuelTypes, transmissionTypes } from "@/data/cars";
+import { useDbCars } from "@/hooks/useCars";
 
 const Browse = () => {
+  const { data: dbCars = [] } = useDbCars();
+  const allCars = useMemo(() => [...dbCars, ...staticCars], [dbCars]);
+  const makes = useMemo(() => [...new Set(allCars.map(c => c.make))].sort(), [allCars]);
+
   const [searchParams] = useSearchParams();
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [bodyType, setBodyType] = useState(searchParams.get("bodyType") || "all");
@@ -22,7 +27,7 @@ const Browse = () => {
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const filtered = useMemo(() => {
-    let result = cars.filter((car) => {
+    let result = allCars.filter((car) => {
       const q = search.toLowerCase();
       const matchesSearch = !q || `${car.make} ${car.model} ${car.year} ${car.color} ${car.bodyType}`.toLowerCase().includes(q);
       const matchesBody = bodyType === "all" || car.bodyType === bodyType;
@@ -39,7 +44,7 @@ const Browse = () => {
     else result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return result;
-  }, [search, bodyType, fuelType, transmission, make, priceRange, sortBy]);
+  }, [search, bodyType, fuelType, transmission, make, priceRange, sortBy, allCars]);
 
   const clearFilters = () => {
     setSearch(""); setBodyType("all"); setFuelType("all"); setTransmission("all"); setMake("all"); setPriceRange([0, 200000]); setSortBy("newest");

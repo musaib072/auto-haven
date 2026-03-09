@@ -9,6 +9,7 @@ const navLinks = [
   { to: "/service", label: "Car Service" },
   { to: "/sell", label: "Sell Your Car" },
   { to: "/how-it-works", label: "How It Works" },
+  { to: "/admin", label: "Manage" },
 ];
 
 export function Header() {
