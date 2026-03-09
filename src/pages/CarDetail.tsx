@@ -7,11 +7,15 @@ import { Separator } from "@/components/ui/separator";
 import { CarCard } from "@/components/CarCard";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { cars } from "@/data/cars";
+import { cars as staticCars } from "@/data/cars";
+import { useDbCars } from "@/hooks/useCars";
+import { useMemo } from "react";
 
 const CarDetail = () => {
   const { id } = useParams();
-  const car = cars.find((c) => c.id === id);
+  const { data: dbCars = [] } = useDbCars();
+  const allCars = useMemo(() => [...dbCars, ...staticCars], [dbCars]);
+  const car = allCars.find((c) => c.id === id);
 
   if (!car) {
     return (
