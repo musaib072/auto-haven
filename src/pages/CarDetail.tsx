@@ -31,7 +31,7 @@ const CarDetail = () => {
     );
   }
 
-  const similar = cars.filter((c) => c.id !== car.id && (c.bodyType === car.bodyType || c.make === car.make)).slice(0, 3);
+  const similar = allCars.filter((c) => c.id !== car.id && (c.bodyType === car.bodyType || c.make === car.make)).slice(0, 3);
 
   const specs = [
     { label: "Year", value: car.year },

@@ -5,14 +5,17 @@ import { Input } from "@/components/ui/input";
 import { CarCard } from "@/components/CarCard";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { cars, bodyTypes } from "@/data/cars";
-import { useState } from "react";
+import { cars as staticCars, bodyTypes } from "@/data/cars";
+import { useDbCars } from "@/hooks/useCars";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
-  const featured = cars.filter((c) => c.featured).slice(0, 6);
+  const { data: dbCars = [] } = useDbCars();
+  const allCars = useMemo(() => [...dbCars, ...staticCars], [dbCars]);
+  const featured = allCars.filter((c) => c.featured).slice(0, 6);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
