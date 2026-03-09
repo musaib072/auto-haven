@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Plus, Pencil, Trash2, Upload, X, Image } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Plus, Pencil, Trash2, Upload, X, Image, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,6 +12,7 @@ import { Footer } from "@/components/Footer";
 import { bodyTypes, fuelTypes, transmissionTypes } from "@/data/cars";
 import { useDbCars, useAddCar, useUpdateCar, useDeleteCar, uploadCarPhoto } from "@/hooks/useCars";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const emptyForm = {
   make: "", model: "", year: "", price: "", mileage: "", body_type: "Sedan",
@@ -21,6 +22,35 @@ const emptyForm = {
 };
 
 const Admin = () => {
+  const [session, setSession] = useState<any>(null);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [authError, setAuthError] = useState("");
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      setAuthLoading(false);
+    });
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setAuthLoading(false);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError("");
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) setAuthError(error.message);
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+  };
+
   const { data: cars = [], isLoading } = useDbCars();
   const addCar = useAddCar();
   const updateCar = useUpdateCar();
@@ -30,6 +60,46 @@ const Admin = () => {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const [uploading, setUploading] = useState(false);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <div className="flex-1 flex items-center justify-center">
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!session) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <div className="flex-1 flex items-center justify-center px-4">
+          <Card className="w-full max-w-sm">
+            <CardContent className="p-6">
+              <h1 className="text-xl font-bold mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Admin Login</h1>
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div>
+                  <Label>Email</Label>
+                  <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                </div>
+                <div>
+                  <Label>Password</Label>
+                  <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                </div>
+                {authError && <p className="text-sm text-destructive">{authError}</p>}
+                <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">Sign In</Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   const update = (field: string, value: string | boolean | string[]) =>
     setForm((p) => ({ ...p, [field]: value }));
@@ -158,9 +228,14 @@ const Admin = () => {
             </h1>
             <p className="text-muted-foreground text-sm mt-1">Add, edit, and remove your car listings</p>
           </div>
-          <Button onClick={() => { resetForm(); setShowForm(true); }} className="bg-accent text-accent-foreground hover:bg-accent/90">
-            <Plus className="h-4 w-4 mr-2" /> Add Car
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={() => { resetForm(); setShowForm(true); }} className="bg-accent text-accent-foreground hover:bg-accent/90">
+              <Plus className="h-4 w-4 mr-2" /> Add Car
+            </Button>
+            <Button variant="outline" size="icon" onClick={handleLogout} title="Sign out">
+              <LogOut className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
 
         {/* Form */}
