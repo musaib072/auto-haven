@@ -8,6 +8,7 @@ import Browse from "./pages/Browse";
 import CarDetail from "./pages/CarDetail";
 import SellCar from "./pages/SellCar";
 import HowItWorks from "./pages/HowItWorks";
+import Service from "./pages/Service";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
