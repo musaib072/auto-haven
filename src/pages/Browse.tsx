@@ -44,7 +44,7 @@ const Browse = () => {
     else result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return result;
-  }, [search, bodyType, fuelType, transmission, make, priceRange, sortBy]);
+  }, [search, bodyType, fuelType, transmission, make, priceRange, sortBy, allCars]);
 
   const clearFilters = () => {
     setSearch(""); setBodyType("all"); setFuelType("all"); setTransmission("all"); setMake("all"); setPriceRange([0, 200000]); setSortBy("newest");
