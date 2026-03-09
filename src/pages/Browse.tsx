@@ -12,6 +12,10 @@ import { cars as staticCars, bodyTypes, fuelTypes, transmissionTypes } from "@/d
 import { useDbCars } from "@/hooks/useCars";
 
 const Browse = () => {
+  const { data: dbCars = [] } = useDbCars();
+  const allCars = useMemo(() => [...dbCars, ...staticCars], [dbCars]);
+  const makes = useMemo(() => [...new Set(allCars.map(c => c.make))].sort(), [allCars]);
+
   const [searchParams] = useSearchParams();
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [bodyType, setBodyType] = useState(searchParams.get("bodyType") || "all");
