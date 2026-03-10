@@ -47,7 +47,7 @@ const Browse = () => {
   }, [search, bodyType, fuelType, transmission, make, priceRange, sortBy, allCars]);
 
   const clearFilters = () => {
-    setSearch(""); setBodyType("all"); setFuelType("all"); setTransmission("all"); setMake("all"); setPriceRange([0, 200000]); setSortBy("newest");
+    setSearch(""); setBodyType("all"); setFuelType("all"); setTransmission("all"); setMake("all"); setPriceRange([0, 10000000]); setSortBy("newest");
   };
 
   const FilterPanel = () => (
