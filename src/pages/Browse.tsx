@@ -22,7 +22,7 @@ const Browse = () => {
   const [fuelType, setFuelType] = useState(searchParams.get("fuelType") || "all");
   const [transmission, setTransmission] = useState("all");
   const [make, setMake] = useState("all");
-  const [priceRange, setPriceRange] = useState([0, 200000]);
+  const [priceRange, setPriceRange] = useState([0, 10000000]);
   const [sortBy, setSortBy] = useState("newest");
   const [filtersOpen, setFiltersOpen] = useState(false);
 
