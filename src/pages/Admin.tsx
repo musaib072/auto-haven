@@ -99,7 +99,15 @@ const Admin = () => {
                   <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 </div>
                 {authError && <p className="text-sm text-destructive">{authError}</p>}
-                <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">Sign In</Button>
+                <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+                  {isSignUp ? "Sign Up" : "Sign In"}
+                </Button>
+                <p className="text-sm text-center text-muted-foreground">
+                  {isSignUp ? "Already have an account?" : "First time?"}{" "}
+                  <button type="button" onClick={() => setIsSignUp(!isSignUp)} className="text-accent underline">
+                    {isSignUp ? "Sign In" : "Create Account"}
+                  </button>
+                </p>
               </form>
             </CardContent>
           </Card>
