@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { CarCard } from "@/components/CarCard";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { cars as staticCars, bodyTypes } from "@/data/cars";
+import { bodyTypes } from "@/data/cars";
 import { useDbCars } from "@/hooks/useCars";
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
