@@ -39,7 +39,7 @@ const CarDetail = () => {
     { label: "Engine", value: car.engine },
     { label: "Transmission", value: car.transmission },
     { label: "Fuel Type", value: car.fuelType },
-    { label: "Mileage", value: `${car.mileage.toLocaleString()} mi` },
+    { label: "Mileage", value: `${car.mileage.toLocaleString('en-IN')} km` },
     { label: "Color", value: car.color },
     { label: "Location", value: car.location },
   ];
