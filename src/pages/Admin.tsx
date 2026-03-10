@@ -40,11 +40,19 @@ const Admin = () => {
     return () => subscription.unsubscribe();
   }, []);
 
+  const [isSignUp, setIsSignUp] = useState(false);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError("");
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) setAuthError(error.message);
+    if (isSignUp) {
+      const { error } = await supabase.auth.signUp({ email, password });
+      if (error) setAuthError(error.message);
+      else toast.success("Account created! You are now logged in.");
+    } else {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) setAuthError(error.message);
+    }
   };
 
   const handleLogout = async () => {
