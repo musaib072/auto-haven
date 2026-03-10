@@ -93,8 +93,8 @@ const Browse = () => {
         </Select>
       </div>
       <div>
-        <label className="text-sm font-medium mb-2 block">Price: ${priceRange[0].toLocaleString()} – ${priceRange[1].toLocaleString()}</label>
-        <Slider min={0} max={200000} step={5000} value={priceRange} onValueChange={setPriceRange} className="mt-3" />
+        <label className="text-sm font-medium mb-2 block">Price: ₹{priceRange[0].toLocaleString()} – ₹{priceRange[1].toLocaleString()}</label>
+        <Slider min={0} max={10000000} step={50000} value={priceRange} onValueChange={setPriceRange} className="mt-3" />
       </div>
       <Button variant="outline" size="sm" onClick={clearFilters} className="w-full">Clear All Filters</Button>
     </div>
