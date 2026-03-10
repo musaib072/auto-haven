@@ -109,9 +109,9 @@ const CarDetail = () => {
               <CardContent className="p-6 space-y-6">
                 <div>
                   <p className="text-3xl font-bold text-accent" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                    ${car.price.toLocaleString()}
+                    ₹{car.price.toLocaleString('en-IN')}
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">Estimated payment: ${Math.round(car.price / 60).toLocaleString()}/mo</p>
+                  <p className="text-xs text-muted-foreground mt-1">EMI: ₹{Math.round(car.price / 60).toLocaleString('en-IN')}/mo (approx)</p>
                 </div>
                 <Separator />
                 <div>

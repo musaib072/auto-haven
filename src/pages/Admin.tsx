@@ -380,7 +380,7 @@ const Admin = () => {
                       {car.year} {car.make} {car.model}
                     </h3>
                     <p className="text-sm text-muted-foreground">
-                      ${car.price.toLocaleString()} · {car.mileage.toLocaleString()} mi · {car.location || "No location"}
+                      ₹{car.price.toLocaleString('en-IN')} · {car.mileage.toLocaleString('en-IN')} km · {car.location || "No location"}
                     </p>
                     {car.featured && <span className="text-xs text-accent font-medium">Featured</span>}
                   </div>
