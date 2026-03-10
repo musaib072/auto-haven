@@ -68,7 +68,7 @@ const CarDetail = () => {
               </h1>
               <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1"><MapPin className="h-4 w-4" />{car.location}</span>
-                <span className="flex items-center gap-1"><Gauge className="h-4 w-4" />{car.mileage.toLocaleString()} mi</span>
+                <span className="flex items-center gap-1"><Gauge className="h-4 w-4" />{car.mileage.toLocaleString('en-IN')} km</span>
               </div>
             </div>
 
