@@ -22,7 +22,7 @@ const Browse = () => {
   const [fuelType, setFuelType] = useState(searchParams.get("fuelType") || "all");
   const [transmission, setTransmission] = useState("all");
   const [make, setMake] = useState("all");
-  const [priceRange, setPriceRange] = useState([0, 200000]);
+  const [priceRange, setPriceRange] = useState([0, 10000000]);
   const [sortBy, setSortBy] = useState("newest");
   const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -47,7 +47,7 @@ const Browse = () => {
   }, [search, bodyType, fuelType, transmission, make, priceRange, sortBy, allCars]);
 
   const clearFilters = () => {
-    setSearch(""); setBodyType("all"); setFuelType("all"); setTransmission("all"); setMake("all"); setPriceRange([0, 200000]); setSortBy("newest");
+    setSearch(""); setBodyType("all"); setFuelType("all"); setTransmission("all"); setMake("all"); setPriceRange([0, 10000000]); setSortBy("newest");
   };
 
   const FilterPanel = () => (
@@ -93,8 +93,8 @@ const Browse = () => {
         </Select>
       </div>
       <div>
-        <label className="text-sm font-medium mb-2 block">Price: ${priceRange[0].toLocaleString()} – ${priceRange[1].toLocaleString()}</label>
-        <Slider min={0} max={200000} step={5000} value={priceRange} onValueChange={setPriceRange} className="mt-3" />
+        <label className="text-sm font-medium mb-2 block">Price: ₹{priceRange[0].toLocaleString()} – ₹{priceRange[1].toLocaleString()}</label>
+        <Slider min={0} max={10000000} step={50000} value={priceRange} onValueChange={setPriceRange} className="mt-3" />
       </div>
       <Button variant="outline" size="sm" onClick={clearFilters} className="w-full">Clear All Filters</Button>
     </div>
