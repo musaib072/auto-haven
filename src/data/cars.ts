@@ -20,7 +20,7 @@ export type Car = {
   createdAt: string;
 };
 
-export const cars: Car[] = [
+export const cars: Car[] = [];
   {
     id: "1", make: "BMW", model: "M4 Competition", year: 2024, price: 78900, mileage: 1200,
     bodyType: "Coupe", fuelType: "Gasoline", transmission: "Automatic", engine: "3.0L Twin-Turbo I6",
