@@ -8,7 +8,7 @@ import { Slider } from "@/components/ui/slider";
 import { CarCard } from "@/components/CarCard";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { cars as staticCars, bodyTypes, fuelTypes, transmissionTypes } from "@/data/cars";
+import { bodyTypes, fuelTypes, transmissionTypes } from "@/data/cars";
 import { useDbCars } from "@/hooks/useCars";
 
 const Browse = () => {
