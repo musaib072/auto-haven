@@ -13,7 +13,7 @@ import { useDbCars } from "@/hooks/useCars";
 
 const Browse = () => {
   const { data: dbCars = [] } = useDbCars();
-  const allCars = useMemo(() => [...dbCars, ...staticCars], [dbCars]);
+  const allCars = dbCars;
   const makes = useMemo(() => [...new Set(allCars.map(c => c.make))].sort(), [allCars]);
 
   const [searchParams] = useSearchParams();

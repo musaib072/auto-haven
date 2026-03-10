@@ -22,7 +22,7 @@ export function CarCard({ car }: { car: Car }) {
           )}
           <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-black/60 to-transparent" />
           <p className="absolute bottom-3 right-3 text-white font-bold text-xl" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            ${car.price.toLocaleString()}
+            ₹{car.price.toLocaleString('en-IN')}
           </p>
         </div>
         <CardContent className="p-4 space-y-3">

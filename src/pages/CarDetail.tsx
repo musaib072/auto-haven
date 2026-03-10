@@ -14,7 +14,7 @@ import { useMemo } from "react";
 const CarDetail = () => {
   const { id } = useParams();
   const { data: dbCars = [] } = useDbCars();
-  const allCars = useMemo(() => [...dbCars, ...staticCars], [dbCars]);
+  const allCars = dbCars;
   const car = allCars.find((c) => c.id === id);
 
   if (!car) {

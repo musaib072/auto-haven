@@ -14,7 +14,7 @@ const Index = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const { data: dbCars = [] } = useDbCars();
-  const allCars = useMemo(() => [...dbCars, ...staticCars], [dbCars]);
+  const allCars = dbCars;
   const featured = allCars.filter((c) => c.featured).slice(0, 6);
 
   const handleSearch = (e: React.FormEvent) => {
