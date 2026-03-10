@@ -7,14 +7,14 @@ import { Separator } from "@/components/ui/separator";
 import { CarCard } from "@/components/CarCard";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { cars as staticCars } from "@/data/cars";
+import type { Car } from "@/data/cars";
 import { useDbCars } from "@/hooks/useCars";
 import { useMemo } from "react";
 
 const CarDetail = () => {
   const { id } = useParams();
   const { data: dbCars = [] } = useDbCars();
-  const allCars = useMemo(() => [...dbCars, ...staticCars], [dbCars]);
+  const allCars = dbCars;
   const car = allCars.find((c) => c.id === id);
 
   if (!car) {
@@ -39,7 +39,7 @@ const CarDetail = () => {
     { label: "Engine", value: car.engine },
     { label: "Transmission", value: car.transmission },
     { label: "Fuel Type", value: car.fuelType },
-    { label: "Mileage", value: `${car.mileage.toLocaleString()} mi` },
+    { label: "Mileage", value: `${car.mileage.toLocaleString('en-IN')} km` },
     { label: "Color", value: car.color },
     { label: "Location", value: car.location },
   ];
@@ -68,7 +68,7 @@ const CarDetail = () => {
               </h1>
               <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1"><MapPin className="h-4 w-4" />{car.location}</span>
-                <span className="flex items-center gap-1"><Gauge className="h-4 w-4" />{car.mileage.toLocaleString()} mi</span>
+                <span className="flex items-center gap-1"><Gauge className="h-4 w-4" />{car.mileage.toLocaleString('en-IN')} km</span>
               </div>
             </div>
 
@@ -109,9 +109,9 @@ const CarDetail = () => {
               <CardContent className="p-6 space-y-6">
                 <div>
                   <p className="text-3xl font-bold text-accent" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                    ${car.price.toLocaleString()}
+                    ₹{car.price.toLocaleString('en-IN')}
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">Estimated payment: ${Math.round(car.price / 60).toLocaleString()}/mo</p>
+                  <p className="text-xs text-muted-foreground mt-1">EMI: ₹{Math.round(car.price / 60).toLocaleString('en-IN')}/mo (approx)</p>
                 </div>
                 <Separator />
                 <div>

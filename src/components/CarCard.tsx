@@ -22,7 +22,7 @@ export function CarCard({ car }: { car: Car }) {
           )}
           <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-black/60 to-transparent" />
           <p className="absolute bottom-3 right-3 text-white font-bold text-xl" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            ${car.price.toLocaleString()}
+            ₹{car.price.toLocaleString('en-IN')}
           </p>
         </div>
         <CardContent className="p-4 space-y-3">
@@ -33,7 +33,7 @@ export function CarCard({ car }: { car: Car }) {
             <p className="text-xs text-muted-foreground mt-0.5">{car.color}</p>
           </div>
           <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1.5"><Gauge className="h-3.5 w-3.5" />{car.mileage.toLocaleString()} mi</span>
+            <span className="flex items-center gap-1.5"><Gauge className="h-3.5 w-3.5" />{car.mileage.toLocaleString('en-IN')} km</span>
             <span className="flex items-center gap-1.5"><Fuel className="h-3.5 w-3.5" />{car.fuelType}</span>
             <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{car.transmission}</span>
             <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" />{car.location.split(",")[0]}</span>
