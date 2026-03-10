@@ -40,11 +40,19 @@ const Admin = () => {
     return () => subscription.unsubscribe();
   }, []);
 
+  const [isSignUp, setIsSignUp] = useState(false);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError("");
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) setAuthError(error.message);
+    if (isSignUp) {
+      const { error } = await supabase.auth.signUp({ email, password });
+      if (error) setAuthError(error.message);
+      else toast.success("Account created! You are now logged in.");
+    } else {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) setAuthError(error.message);
+    }
   };
 
   const handleLogout = async () => {
@@ -91,7 +99,15 @@ const Admin = () => {
                   <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 </div>
                 {authError && <p className="text-sm text-destructive">{authError}</p>}
-                <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">Sign In</Button>
+                <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+                  {isSignUp ? "Sign Up" : "Sign In"}
+                </Button>
+                <p className="text-sm text-center text-muted-foreground">
+                  {isSignUp ? "Already have an account?" : "First time?"}{" "}
+                  <button type="button" onClick={() => setIsSignUp(!isSignUp)} className="text-accent underline">
+                    {isSignUp ? "Sign In" : "Create Account"}
+                  </button>
+                </p>
               </form>
             </CardContent>
           </Card>
