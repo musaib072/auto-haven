@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { CarCard } from "@/components/CarCard";
+import { ImageCarousel } from "@/components/ImageCarousel";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import type { Car } from "@/data/cars";
@@ -55,12 +56,11 @@ const CarDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left: Image + Details */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="relative rounded-2xl overflow-hidden aspect-[16/9]">
-              <img src={car.image} alt={`${car.year} ${car.make} ${car.model}`} className="w-full h-full object-cover" />
-              {car.featured && (
-                <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground border-0">Featured</Badge>
-              )}
-            </div>
+            <ImageCarousel 
+              images={car.images} 
+              carName={`${car.year} ${car.make} ${car.model}`}
+              featured={car.featured}
+            />
 
             <div>
               <h1 className="text-3xl md:text-4xl font-bold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
