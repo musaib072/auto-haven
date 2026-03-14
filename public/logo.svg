@@ -1,0 +1,34 @@
+<svg viewBox="0 0 1478 672" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+  <!-- Car body outline in black -->
+  <path d="M 320 230 Q 400 180 550 180 L 1050 180 Q 1150 180 1150 250 L 1150 400 Q 1100 420 950 420 L 400 420 Q 250 420 200 400 L 200 250 Q 200 180 320 230" fill="none" stroke="#1a1a1a" stroke-width="45" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Red accent stripe -->
+  <path d="M 350 200 Q 420 160 550 160 L 1100 160 Q 1180 160 1200 220" fill="none" stroke="#d32f2f" stroke-width="55" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Black hood line -->
+  <path d="M 280 250 Q 350 220 550 220 L 800 220" fill="none" stroke="#1a1a1a" stroke-width="40" stroke-linecap="round"/>
+  
+  <!-- Left wheel -->
+  <circle cx="380" cy="420" r="70" fill="none" stroke="#1a1a1a" stroke-width="40"/>
+  <circle cx="380" cy="420" r="35" fill="#1a1a1a"/>
+  
+  <!-- Right wheel -->
+  <circle cx="1020" cy="420" r="70" fill="none" stroke="#1a1a1a" stroke-width="40"/>
+  <circle cx="1020" cy="420" r="35" fill="#1a1a1a"/>
+  
+  <!-- Left headlight -->
+  <circle cx="250" cy="290" r="45" fill="none" stroke="#1a1a1a" stroke-width="35"/>
+  <circle cx="250" cy="290" r="20" fill="#1a1a1a"/>
+  
+  <!-- Right headlight -->
+  <circle cx="1130" cy="290" r="45" fill="none" stroke="#1a1a1a" stroke-width="35"/>
+  <circle cx="1130" cy="290" r="20" fill="#1a1a1a"/>
+  
+  <!-- Windshield accent -->
+  <path d="M 550 220 L 480 280" fill="none" stroke="#1a1a1a" stroke-width="35" stroke-linecap="round"/>
+  
+  <!-- Text: AUTO FLEXII -->
+  <text x="140" y="550" font-family="Arial, sans-serif" font-size="140" font-weight="bold" fill="#d32f2f" letter-spacing="15">AUTO </text>
+  <text x="800" y="550" font-family="Arial, sans-serif" font-size="140" font-weight="bold" fill="#d32f2f" letter-spacing="8">FLEXI</text>
+  <text x="1290" y="550" font-family="Arial, sans-serif" font-size="140" font-weight="bold" fill="#d32f2f">I</text>
+</svg>
