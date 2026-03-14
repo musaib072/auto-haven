@@ -116,19 +116,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="rounded-2xl bg-primary text-primary-foreground p-8 md:p-14 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-bold mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Ready to Sell?</h2>
-            <p className="opacity-80">List your car for free and reach thousands of potential buyers.</p>
-          </div>
-          <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shrink-0">
-            <Link to="/sell">Sell Your Car <ArrowRight className="ml-2 h-4 w-4" /></Link>
-          </Button>
-        </div>
-      </section>
-
+      {/* Footer */}
       <Footer />
     </div>
   );

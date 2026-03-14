@@ -6,7 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index";
 import Browse from "./pages/Browse";
 import CarDetail from "./pages/CarDetail";
-import SellCar from "./pages/SellCar";
+import Contact from "./pages/Contact";
 import HowItWorks from "./pages/HowItWorks";
 import Service from "./pages/Service";
 import Admin from "./pages/Admin";
@@ -25,7 +25,7 @@ const App = () => (
           <Route path="/browse" element={<Browse />} />
           <Route path="/car/:id" element={<CarDetail />} />
           <Route path="/service" element={<Service />} />
-          <Route path="/sell" element={<SellCar />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="*" element={<NotFound />} />

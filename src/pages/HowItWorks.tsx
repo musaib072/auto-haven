@@ -48,7 +48,7 @@ const HowItWorks = () => (
           <Link to="/browse">Browse Cars</Link>
         </Button>
         <Button asChild variant="outline" size="lg">
-          <Link to="/sell">Sell Your Car</Link>
+          <Link to="/contact">Contact Us</Link>
         </Button>
       </div>
     </div>
