@@ -11,7 +11,7 @@ export function Footer() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-accent-foreground">
                 <Car className="h-4 w-4" />
               </div>
-              AutoVault
+              autoflexii
             </div>
             <p className="text-sm text-muted-foreground max-w-xs">The modern marketplace for buying and selling quality vehicles. Trusted by thousands of car enthusiasts.</p>
           </div>
@@ -34,7 +34,7 @@ export function Footer() {
           </div>
         </div>
         <div className="border-t mt-8 pt-6 text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} AutoVault. All rights reserved. Demo project.
+          © {new Date().getFullYear()} autoflexii. All rights reserved. Designed BY akamusaib
         </div>
       </div>
     </footer>

@@ -22,7 +22,7 @@ export function Header() {
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground">
             <Car className="h-5 w-5" />
           </div>
-          <span>AutoVault</span>
+          <span>autoflexii</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">

@@ -21,7 +21,7 @@ const HowItWorks = () => (
     <Header />
     <div className="container mx-auto px-4 py-16 flex-1">
       <div className="text-center max-w-xl mx-auto mb-16">
-        <h1 className="text-3xl md:text-4xl font-bold mb-3" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>How AutoVault Works</h1>
+        <h1 className="text-3xl md:text-4xl font-bold mb-3" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>How autoflexii Works</h1>
         <p className="text-muted-foreground">Whether you're buying or selling, we make the process simple, transparent, and fast.</p>
       </div>
 

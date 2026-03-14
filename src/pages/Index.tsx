@@ -97,7 +97,7 @@ const Index = () => {
       {/* Value Props */}
       <section className="bg-muted/50 py-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Why AutoVault?</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Why autoflexii?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { icon: Shield, title: "Trusted Sellers", desc: "Every seller is verified with ratings and reviews from real buyers." },

@@ -107,8 +107,8 @@ export function useDeleteCar() {
 export async function uploadCarPhoto(file: File): Promise<string> {
   const ext = file.name.split(".").pop();
   const path = `${crypto.randomUUID()}.${ext}`;
-  const { error } = await supabase.storage.from("car-photos").upload(path, file);
+  const { error } = await supabase.storage.from("autoflexii").upload(path, file);
   if (error) throw error;
-  const { data } = supabase.storage.from("car-photos").getPublicUrl(path);
+  const { data } = supabase.storage.from("autoflexii").getPublicUrl(path);
   return data.publicUrl;
 }
