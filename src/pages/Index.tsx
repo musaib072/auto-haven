@@ -108,7 +108,14 @@ const Index = () => {
           ))}
         </div>
         <div className="mt-8 text-center sm:hidden">
-          <Button asChild relative py-20 overflow-hidden">
+          <Button asChild variant="outline">
+            <Link to="/browse">View All Listings</Link>
+          </Button>
+        </div>
+      </section>
+
+      {/* Value Props */}
+      <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-accent/5 via-transparent to-primary/5" />
         <div className="container mx-auto px-4 relative">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-14 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
@@ -131,7 +138,20 @@ const Index = () => {
                 <div className="relative">
                   <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-accent/20 to-accent/10 text-accent mb-4 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-accent/20 transition-all duration-300">
                     <item.icon className="h-7 w-7" />
-      
+                  </div>
+                  <h3 className="font-bold text-xl mb-2 group-hover:text-accent transition-colors" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                    {item.title}
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+
       <style>{`
         @keyframes slideUp {
           from {
@@ -190,27 +210,6 @@ const Index = () => {
           }
         }
       `}</style>
-                  </div>
-                  <h3 className="font-bold text-xl mb-2 group-hover:text-accent transition-colors" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                    {item.title}
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
-                </divr next ride even faster." },
-            ].map((item) => (
-              <div key={item.title} className="text-center p-6">
-                <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-accent/10 text-accent mb-4">
-                  <item.icon className="h-7 w-7" />
-                </div>
-                <h3 className="font-semibold text-lg mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{item.title}</h3>
-                <p className="text-sm text-muted-foreground max-w-xs mx-auto">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <Footer />
     </div>
   );
 };
