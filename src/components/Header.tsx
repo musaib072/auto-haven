@@ -16,10 +16,11 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-card/80 backdrop-blur-lg">
+    <header className="sticky top-0 z-50 border-b bg-gradient-to-r from-card to-card/95 backdrop-blur-lg border-b-red-600/30">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link to="/" className="flex items-center gap-2 font-bold text-xl tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-          <img src="/logo.svg" alt="autoflexii" className="h-10 w-auto" />
+        <Link to="/" className="flex items-center gap-3 font-bold text-2xl tracking-tight hover:opacity-80 transition-opacity" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+          <img src="/logo-icon.svg" alt="autoflexii" className="h-11 w-auto drop-shadow-sm hover:drop-shadow-md transition-all" />
+          <span className="bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent">autoflexii</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
