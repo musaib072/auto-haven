@@ -26,38 +26,38 @@ const Index = () => {
     <div className="min-h-screen flex flex-col overflow-hidden">
       <Header />
 
-      {/* Animated Background Elements - Red & Black Theme */}
-      <div className="fixed inset-0 -z-20 overflow-hidden bg-gradient-to-b from-gray-950 via-black to-gray-900">
-        {/* Red glow orbs */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-red-600/40 via-red-600/10 to-transparent rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-red-700/30 via-red-600/5 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDelay: "0.5s" }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-red-600/20 to-black/40 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+      {/* Animated Background Elements - Light with Red Accents */}
+      <div className="fixed inset-0 -z-20 overflow-hidden bg-gradient-to-b from-white via-red-50/30 to-gray-50">
+        {/* Red glow orbs - subtle */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-red-200/20 via-red-100/5 to-transparent rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-red-100/15 via-red-50/5 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDelay: "0.5s" }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-gray-200/10 to-red-100/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
       </div>
 
       {/* Hero */}
       <section className="relative overflow-hidden py-20 md:py-40">
-        <div className="absolute inset-0 bg-gradient-to-b from-red-600/10 via-transparent to-black/20 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-red-500/5 via-transparent to-white pointer-events-none" />
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl animate-in fade-in duration-500">
             <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[1.0] mb-8" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
               Find Your Next
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-400 to-red-600 drop-shadow-lg"> Dream Car</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-500 to-red-700 drop-shadow-sm"> Dream Car</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-10 max-w-3xl leading-relaxed animate-in fade-in duration-500 font-light" style={{ animationDelay: "0.1s" }}>
+            <p className="text-xl md:text-2xl text-gray-700 mb-10 max-w-3xl leading-relaxed animate-in fade-in duration-500 font-light" style={{ animationDelay: "0.1s" }}>
               Discover premium vehicles from trusted sellers. Browse, compare, and find your perfect match with confidence.
             </p>
             <form onSubmit={handleSearch} className="flex gap-3 max-w-xl animate-in fade-in duration-500" style={{ animationDelay: "0.2s" }}>
               <div className="relative flex-1 group">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-red-500 transition-colors" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-red-600 transition-colors" />
                 <Input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search make, model, or keyword..."
-                  className="pl-12 h-16 bg-white/5 backdrop-blur-xl border border-white/10 text-white placeholder:text-gray-400 rounded-xl text-lg transition-all duration-300 focus:border-red-500/50 focus:shadow-lg focus:shadow-red-600/20 hover:border-white/20"
+                  className="pl-12 h-16 bg-white/80 backdrop-blur-sm border-2 border-gray-200 text-gray-900 placeholder:text-gray-500 rounded-xl text-lg transition-all duration-300 focus:border-red-500 focus:shadow-lg focus:shadow-red-200/50 hover:border-gray-300"
                 />
               </div>
-              <Button type="submit" className="h-16 px-10 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-red-600/50 transition-all duration-300 hover:-translate-y-1">
+              <Button type="submit" className="h-16 px-10 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold text-lg rounded-xl shadow-md hover:shadow-red-200/50 transition-all duration-300 hover:-translate-y-1">
                 Search
               </Button>
             </form>
@@ -72,12 +72,12 @@ const Index = () => {
             <Link
               key={type}
               to={`/browse?bodyType=${type}`}
-              className="flex-shrink-0 rounded-xl bg-gradient-to-br from-gray-800/80 to-gray-900/60 border border-white/10 hover:border-red-500/50 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-red-600/30 transition-all duration-300 hover:-translate-y-1 hover:bg-gradient-to-br hover:from-gray-700/90 hover:to-gray-800/70 backdrop-blur-md group"
+              className="flex-shrink-0 rounded-xl bg-gradient-to-br from-white to-gray-50 border border-gray-200 hover:border-red-500 px-6 py-3 text-sm font-semibold text-gray-800 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 hover:bg-gradient-to-br hover:from-red-50 hover:to-white group"
               style={{
                 animation: `slideUp 0.5s ease-out ${idx * 0.05}s both`,
               }}
             >
-              <span className="group-hover:text-red-400 transition-colors">{type}</span>
+              <span className="group-hover:text-red-600 transition-colors">{type}</span>
             </Link>
           ))}
         </div>
@@ -87,12 +87,12 @@ const Index = () => {
       <section className="container mx-auto px-4 py-24">
         <div className="flex items-end justify-between mb-16">
           <div className="animate-in slide-in-from-left duration-500">
-            <h2 className="text-5xl md:text-6xl font-black tracking-tight text-white" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+            <h2 className="text-5xl md:text-6xl font-black tracking-tight text-gray-900" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
               Featured Listings
             </h2>
-            <p className="text-gray-400 mt-3 text-lg font-light">Curated premium vehicles for you</p>
+            <p className="text-gray-600 mt-3 text-lg font-light">Curated premium vehicles for you</p>
           </div>
-            <Link to="/browse" className="hidden sm:flex items-center gap-2 text-lg font-bold text-red-500 hover:text-red-400 transition-colors group">
+            <Link to="/browse" className="hidden sm:flex items-center gap-2 text-lg font-bold text-red-600 hover:text-red-700 transition-colors group">
               View all <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Link>
         </div>
@@ -117,9 +117,9 @@ const Index = () => {
 
       {/* Value Props */}
       <section className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-red-600/5 via-transparent to-red-600/5" />
+        <div className="absolute inset-0 bg-gradient-to-r from-red-500/3 via-transparent to-red-500/3" />
         <div className="container mx-auto px-4 relative">
-          <h2 className="text-5xl md:text-6xl font-black text-center mb-16 text-white tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+          <h2 className="text-5xl md:text-6xl font-black text-center mb-16 text-gray-900 tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
             Why Choose autoflexii?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -130,20 +130,20 @@ const Index = () => {
             ].map((item, idx) => (
               <div
                 key={item.title}
-                className="group relative p-8 rounded-2xl bg-gradient-to-br from-gray-800/40 to-gray-900/40 border border-white/10 hover:border-red-500/50 backdrop-blur-lg hover:bg-gradient-to-br hover:from-gray-800/60 hover:to-gray-900/50 transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl hover:shadow-red-600/20"
+                className="group relative p-8 rounded-2xl bg-white border border-gray-200 hover:border-red-500 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-3 hover:bg-gradient-to-br hover:from-red-50/50 hover:to-white"
                 style={{
                   animation: `slideUp 0.5s ease-out ${idx * 0.1}s both`,
                 }}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-red-600/0 to-red-600/5 rounded-2xl group-hover:from-red-600/5 group-hover:to-red-600/10 transition-all duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-br from-red-500/0 to-red-500/3 rounded-2xl group-hover:from-red-500/5 group-hover:to-red-500/8 transition-all duration-300" />
                 <div className="relative">
-                  <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-red-600/30 to-red-700/20 text-red-400 mb-4 group-hover:scale-125 group-hover:shadow-lg group-hover:shadow-red-600/40 group-hover:bg-gradient-to-br group-hover:from-red-600/50 group-hover:to-red-700/30 transition-all duration-300">
+                  <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-red-100 to-red-50 text-red-600 mb-4 group-hover:scale-125 group-hover:shadow-md group-hover:shadow-red-200/50 group-hover:bg-gradient-to-br group-hover:from-red-200 group-hover:to-red-100 transition-all duration-300">
                     <item.icon className="h-7 w-7" />
                   </div>
-                  <h3 className="font-bold text-xl mb-2 text-white group-hover:text-red-400 transition-colors" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                  <h3 className="font-bold text-xl mb-2 text-gray-900 group-hover:text-red-600 transition-colors" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                     {item.title}
                   </h3>
-                  <p className="text-gray-400 leading-relaxed">{item.desc}</p>
+                  <p className="text-gray-600 leading-relaxed">{item.desc}</p>
                 </div>
               </div>
             ))}

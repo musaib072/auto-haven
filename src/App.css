@@ -60,23 +60,23 @@
   animation: slideInLeft 0.5s ease-out;
 }
 
-/* Red and black scrollbar styling */
+/* Red and black scrollbar styling for light theme */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(242, 242, 242, 0.5);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(220, 38, 38, 0.5);
+  background: rgba(220, 38, 38, 0.6);
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(220, 38, 38, 0.8);
+  background: rgba(220, 38, 38, 0.9);
 }
 
 /* Smooth gradient transitions */
