@@ -22,7 +22,7 @@ export type Car = {
 
 export const cars: Car[] = [];
 
-export const bodyTypes = ["Sedan", "SUV", "Coupe", "Hatchback", "Wagon", "Convertible", "Truck"];
+export const bodyTypes = ["Sedan", "SUV", "Coupe", "Hatchback", "Wagon", "Convertible"];
 export const fuelTypes = ["Petrol", "Diesel", "Electric", "Hybrid", "CNG"];
 export const transmissionTypes = ["Automatic", "Manual"];
 export const makes = [...new Set(cars.map(c => c.make))].sort();

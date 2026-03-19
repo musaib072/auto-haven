@@ -28,7 +28,6 @@ export function Footer() {
             <div className="space-y-2 text-sm text-gray-600">
               <Link to="/browse?bodyType=SUV" className="block hover:text-red-600 transition-colors font-medium">SUVs</Link>
               <Link to="/browse?bodyType=Sedan" className="block hover:text-red-600 transition-colors font-medium">Sedans</Link>
-              <Link to="/browse?bodyType=Truck" className="block hover:text-red-600 transition-colors font-medium">Trucks</Link>
               <Link to="/browse?fuelType=Electric" className="block hover:text-red-600 transition-colors font-medium">Electric</Link>
             </div>
           </div>
