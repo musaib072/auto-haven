@@ -34,7 +34,7 @@ export function ImageCarousel({ images, carName, featured }: ImageCarouselProps)
           <img
             src={currentImage}
             alt={carName}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
             loading="eager"
           />
           {featured && (
@@ -88,7 +88,7 @@ export function ImageCarousel({ images, carName, featured }: ImageCarouselProps)
               <img
                 src={image}
                 alt={`${carName} ${index + 1}`}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             </button>
           ))}
