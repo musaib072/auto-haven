@@ -37,6 +37,16 @@ const Index = () => {
       {/* Hero */}
       <section className="relative overflow-hidden py-20 md:py-40">
         <div className="absolute inset-0 bg-gradient-to-b from-red-500/5 via-transparent to-white pointer-events-none" />
+        
+        {/* Logo Background - Transparent on Right */}
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 -z-10 opacity-10 md:opacity-15 pointer-events-none overflow-hidden">
+          <img 
+            src="/Autoflexinew.jpeg" 
+            alt="AutoFlexxii Logo" 
+            className="h-96 md:h-screen w-auto object-contain"
+          />
+        </div>
+        
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl animate-in fade-in duration-500">
             <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[1.0] mb-8" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>

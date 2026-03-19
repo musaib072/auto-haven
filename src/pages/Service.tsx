@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { format } from "date-fns";
-import { CalendarIcon, Clock, Droplets, CircleDot, Octagon, Search, Battery, Snowflake, Move, Sparkles, Check, ArrowLeft, ArrowRight } from "lucide-react";
+import { CalendarIcon, Clock, Droplets, CircleDot, Octagon, Search, Battery, Snowflake, Move, Sparkles, Check, ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { serviceTypes, timeSlots } from "@/data/services";
 import { toast } from "sonner";
+import { sendServiceBookingEmail } from "@/lib/emailService";
 
 const iconMap: Record<string, React.ElementType> = {
   droplets: Droplets, "circle-dot": CircleDot, octagon: Octagon, search: Search,
@@ -27,6 +28,7 @@ const Service = () => {
   const [date, setDate] = useState<Date>();
   const [time, setTime] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", phone: "", email: "", carInfo: "", notes: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const service = serviceTypes.find((s) => s.id === selectedService);
   const update = (field: string, value: string) => setForm((p) => ({ ...p, [field]: value }));
@@ -41,10 +43,37 @@ const Service = () => {
   const next = () => { if (canNext() && step < 3) setStep(step + 1); };
   const prev = () => { if (step > 0) setStep(step - 1); };
 
-  const submit = () => {
-    toast.success("Service appointment booked! (Demo only — no data saved)");
-    setStep(0); setSelectedService(null); setDate(undefined); setTime(null);
-    setForm({ name: "", phone: "", email: "", carInfo: "", notes: "" });
+  const submit = async () => {
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
+    try {
+      // Send email with booking details
+      await sendServiceBookingEmail({
+        serviceName: service?.name || "Unknown Service",
+        date: date ? format(date, "PPPP") : "Not specified",
+        time: time || "Not specified",
+        name: form.name,
+        phone: form.phone,
+        email: form.email || "not-provided@example.com",
+        carInfo: form.carInfo,
+        notes: form.notes,
+      });
+
+      toast.success("Service appointment booked! Email confirmation sent.");
+      
+      // Reset form
+      setStep(0);
+      setSelectedService(null);
+      setDate(undefined);
+      setTime(null);
+      setForm({ name: "", phone: "", email: "", carInfo: "", notes: "" });
+    } catch (error) {
+      console.error("Booking error:", error);
+      toast.error("Failed to book appointment. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -182,11 +211,20 @@ const Service = () => {
 
         {/* Nav buttons */}
         <div className="flex justify-between mt-8">
-          <Button variant="outline" onClick={prev} disabled={step === 0}><ArrowLeft className="h-4 w-4 mr-1" /> Back</Button>
+          <Button variant="outline" onClick={prev} disabled={step === 0 || isSubmitting}><ArrowLeft className="h-4 w-4 mr-1" /> Back</Button>
           {step < 3 ? (
-            <Button onClick={next} disabled={!canNext()} className="bg-accent text-accent-foreground hover:bg-accent/90">Next <ArrowRight className="h-4 w-4 ml-1" /></Button>
+            <Button onClick={next} disabled={!canNext() || isSubmitting} className="bg-accent text-accent-foreground hover:bg-accent/90">Next <ArrowRight className="h-4 w-4 ml-1" /></Button>
           ) : (
-            <Button onClick={submit} className="bg-accent text-accent-foreground hover:bg-accent/90">Confirm Booking</Button>
+            <Button onClick={submit} disabled={isSubmitting} className="bg-accent text-accent-foreground hover:bg-accent/90">
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Booking...
+                </>
+              ) : (
+                "Confirm Booking"
+              )}
+            </Button>
           )}
         </div>
       </div>

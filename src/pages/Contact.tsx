@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Mail, Phone, MapPin, Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { toast } from "sonner";
+import { sendContactFormEmail } from "@/lib/emailService";
 
 const Contact = () => {
   const [form, setForm] = useState({
@@ -35,35 +36,25 @@ const Contact = () => {
     setSending(true);
 
     try {
-      const response = await fetch("https://formsubmit.co/ajax/Autoflexiiii@gmail.com", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          phone: form.phone,
-          subject: form.subject,
-          message: form.message,
-        }),
+      await sendContactFormEmail({
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        subject: form.subject,
+        message: form.message,
       });
 
-      if (response.ok) {
-        toast.success("Message sent successfully! We'll get back to you soon.");
-        setForm({
-          name: "",
-          email: "",
-          phone: "",
-          subject: "",
-          message: "",
-        });
-      } else {
-        toast.error("Failed to send message. Please try again.");
-      }
+      toast.success("Message sent successfully! We'll get back to you soon.");
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+      });
     } catch (error) {
-      toast.error("Error sending message. Please try again later.");
+      console.error("Contact form error:", error);
+      toast.error("Failed to send message. Please try again.");
     } finally {
       setSending(false);
     }
@@ -287,8 +278,17 @@ const Contact = () => {
                     disabled={sending}
                     className="w-full bg-gradient-to-r from-accent to-accent/80 text-accent-foreground font-semibold py-3 rounded-lg hover:shadow-lg hover:shadow-accent/40 transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed group"
                   >
-                    <Send className="h-4 w-4 mr-2 group-hover:rotate-45 transition-transform duration-300" />
-                    {sending ? "Sending..." : "Send Message"}
+                    {sending ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="h-4 w-4 mr-2 group-hover:rotate-45 transition-transform duration-300" />
+                        Send Message
+                      </>
+                    )}
                   </Button>
                 </form>
               </CardContent>
