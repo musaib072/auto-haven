@@ -86,12 +86,54 @@ export type Database = {
         }
         Relationships: []
       }
+      enquiries: {
+        Row: {
+          created_at: string
+          details: Json
+          email: string | null
+          email_status: string
+          id: string
+          kind: string
+          name: string
+          phone: string
+          photo_urls: string[] | null
+          reference: string
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string
+          details?: Json
+          email?: string | null
+          email_status?: string
+          id?: string
+          kind: string
+          name: string
+          phone: string
+          photo_urls?: string[] | null
+          reference: string
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string
+          details?: Json
+          email?: string | null
+          email_status?: string
+          id?: string
+          kind?: string
+          name?: string
+          phone?: string
+          photo_urls?: string[] | null
+          reference?: string
+          subject?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: { Args: Record<PropertyKey, never>; Returns: boolean }
     }
     Enums: {
       [_ in never]: never

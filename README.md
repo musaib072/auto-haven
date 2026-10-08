@@ -1,75 +1,66 @@
-# Welcome to your Lovable project
+# AUTOFLEXII — Buy. Sell. Inspect. Care.
 
-## Project info
+Marketing site and lead-capture forms for AUTOFLEXII (Amravati, Maharashtra): pre-owned car buying & selling, Inspectify 299+ point inspections, door-to-door car spa, insurance assistance and PDI.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+**Stack:** Vite · React 18 · TypeScript · Tailwind CSS · shadcn/ui · React Hook Form + Zod · TanStack Query · Supabase (listings, enquiries, storage) · EmailJS (form → email)
 
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+## Quick start
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+npm ci
+cp .env.example .env      # fill in Supabase + EmailJS keys
+npm run dev               # http://localhost:8080
 ```
 
-**Edit a file directly in GitHub**
+| Script | What it does |
+|---|---|
+| `npm run dev` | Dev server with HMR |
+| `npm run build` | Production build to `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm run typecheck` | TypeScript check |
+| `npm run lint` | ESLint |
+| `npm test` | Unit tests (Vitest) |
+| `npm run check` | typecheck + lint + test + build (run before deploying) |
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Pages
 
-**Use GitHub Codespaces**
+| Route | Page |
+|---|---|
+| `/` | Home — hero, services, Buy / Sell / Car Spa forms, Inspectify, Why AUTOFLEXII |
+| `/buy` | Car listings (from Supabase) + "find my car" request |
+| `/car/:id` | Car details |
+| `/sell` | Sell your car (with photo upload) |
+| `/car-spa` | Packages + slot booking |
+| `/inspectify` | Inspection details + booking |
+| `/about`, `/contact`, `/privacy`, `/terms` | Info pages |
+| `/admin` | Manage listings + view enquiries (admins only) |
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Old URLs `/browse`, `/service` and `/how-it-works` redirect to the new pages.
 
-## What technologies are used for this project?
+## Where things live
 
-This project is built with:
+```
+src/
+  config/site.ts          ← business name, phones, email, Instagram, address (edit here)
+  data/options.ts         ← dropdown options, spa packages, time slots
+  lib/emailService.ts     ← EmailJS delivery + Supabase enquiry backup
+  lib/validation.ts       ← Indian mobile / registration validation
+  hooks/useEnquirySubmit  ← spam protection, toasts
+  components/forms/       ← Buy, Sell, Car Spa, Inspection forms
+  components/home/        ← homepage sections
+public/images/            ← hero & section photos (swap for higher-resolution shots anytime, same filenames)
+supabase/migrations/      ← database schema + security policies
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Email delivery
 
-## How can I deploy this project?
+See **[EMAIL_SETUP.md](./EMAIL_SETUP.md)**. Short version: set `VITE_EMAILJS_PUBLIC_KEY`, service ID and the two template IDs in `.env` **and** in Vercel, then redeploy.
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## Deploying (Vercel)
 
-## Can I connect a custom domain to my Lovable project?
+1. Add all variables from `.env.example` in Vercel → Settings → Environment Variables.
+2. Apply the Supabase migration in `supabase/migrations/` (SQL editor or `supabase db push`).
+3. Push to the main branch. `vercel.json` handles SPA routing, security headers (CSP, HSTS…) and asset caching.
+4. Set `VITE_SITE_URL` to your real domain so canonical links, the sitemap and social previews point to it.
 
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
-
-
+If you add a new third-party service that the browser calls, add its domain to the `connect-src` part of the CSP in `vercel.json`.

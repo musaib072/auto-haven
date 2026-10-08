@@ -1,39 +1,61 @@
-import { Car } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Instagram, MapPin, Phone } from "lucide-react";
+import { Logo } from "@/components/brand/Logo";
+import { navLinks, site, telHref } from "@/config/site";
 
 export function Footer() {
   return (
-    <footer className="border-t border-gray-200 bg-gradient-to-b from-white to-gray-50 mt-16">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div>
-            <div className="flex items-center gap-3 font-bold text-lg mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-red-600 to-red-700 text-white shadow-md">
-                <Car className="h-5 w-5" />
-              </div>
-              <span className="bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">autoflexii</span>
-            </div>
-            <p className="text-sm text-gray-600 max-w-xs leading-relaxed">The modern marketplace for buying and selling quality vehicles. Trusted by thousands of car enthusiasts.</p>
-          </div>
-          <div>
-            <h4 className="font-bold mb-4 text-gray-900 tracking-wide" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Quick Links</h4>
-            <div className="space-y-2 text-sm text-gray-600">
-              <Link to="/browse" className="block hover:text-red-600 transition-colors font-medium">Browse Cars</Link>
-              <Link to="/contact" className="block hover:text-red-600 transition-colors font-medium">Contact</Link>
-              <Link to="/how-it-works" className="block hover:text-red-600 transition-colors font-medium">How It Works</Link>
-            </div>
-          </div>
-          <div>
-            <h4 className="font-bold mb-4 text-gray-900 tracking-wide" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Categories</h4>
-            <div className="space-y-2 text-sm text-gray-600">
-              <Link to="/browse?bodyType=SUV" className="block hover:text-red-600 transition-colors font-medium">SUVs</Link>
-              <Link to="/browse?bodyType=Sedan" className="block hover:text-red-600 transition-colors font-medium">Sedans</Link>
-              <Link to="/browse?fuelType=Electric" className="block hover:text-red-600 transition-colors font-medium">Electric</Link>
-            </div>
+    <footer className="mt-auto border-t border-gold/15 bg-black">
+      <div className="container py-10">
+        <div className="flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
+          <Logo size="md" />
+
+          <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-3">
+            {navLinks.map((l) => (
+              <Link key={l.to} to={l.to} className="text-xs text-foreground/75 transition-colors hover:text-gold">
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="flex flex-col gap-3 text-xs text-foreground/80 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5">
+            <span className="flex items-center gap-2">
+              <Phone className="h-4 w-4 text-gold" aria-hidden="true" />
+              {site.phones.map((p, i) => (
+                <span key={p} className="flex items-center gap-2">
+                  {i > 0 && <span className="text-foreground/30">|</span>}
+                  <a href={telHref(p)} className="hover:text-gold transition-colors">
+                    {p}
+                  </a>
+                </span>
+              ))}
+            </span>
+            <a
+              href={site.instagram.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 hover:text-gold transition-colors"
+            >
+              <Instagram className="h-4 w-4 text-gold" aria-hidden="true" />
+              {site.instagram.handle}
+            </a>
+            <span className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-gold" aria-hidden="true" />
+              {site.address.display}
+            </span>
           </div>
         </div>
-        <div className="border-t border-gray-200 mt-8 pt-6 text-center text-xs text-gray-500">
-          © {new Date().getFullYear()} autoflexii. All rights reserved. Designed by akamusaib
+
+        <div className="mt-8 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-foreground/55 sm:flex-row sm:items-center sm:justify-between">
+          <p>© {new Date().getFullYear()} AUTOFLEXII. All rights reserved.</p>
+          <div className="flex gap-6">
+            <Link to="/privacy" className="hover:text-gold transition-colors">
+              Privacy Policy
+            </Link>
+            <Link to="/terms" className="hover:text-gold transition-colors">
+              Terms &amp; Conditions
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

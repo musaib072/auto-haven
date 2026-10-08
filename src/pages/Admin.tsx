@@ -7,22 +7,23 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
+import { SiteLayout } from "@/components/layout/SiteLayout";
+import { EnquiriesPanel } from "@/components/admin/EnquiriesPanel";
 import { bodyTypes, fuelTypes, transmissionTypes } from "@/data/cars";
 import { useDbCars, useAddCar, useUpdateCar, useDeleteCar, uploadCarPhoto } from "@/hooks/useCars";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import type { Session } from "@supabase/supabase-js";
 
 const emptyForm = {
   make: "", model: "", year: "", price: "", mileage: "", body_type: "Sedan",
-  fuel_type: "Gasoline", transmission: "Automatic", engine: "", color: "",
+  fuel_type: "Petrol", transmission: "Automatic", engine: "", color: "",
   description: "", location: "", image_url: "", gallery: [] as string[],
   features: "", seller_name: "", seller_phone: "", is_featured: false,
 };
 
 const Admin = () => {
-  const [session, setSession] = useState<any>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -40,19 +41,11 @@ const Admin = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const [isSignUp, setIsSignUp] = useState(false);
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError("");
-    if (isSignUp) {
-      const { error } = await supabase.auth.signUp({ email, password });
-      if (error) setAuthError(error.message);
-      else toast.success("Account created! You are now logged in.");
-    } else {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) setAuthError(error.message);
-    }
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) setAuthError(error.message);
   };
 
   const handleLogout = async () => {
@@ -71,49 +64,42 @@ const Admin = () => {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <div className="flex-1 flex items-center justify-center">
+      <SiteLayout title="Admin" noindex>
+        <div className="flex min-h-[60vh] items-center justify-center">
           <p className="text-muted-foreground">Loading...</p>
         </div>
-        <Footer />
-      </div>
+      </SiteLayout>
     );
   }
 
   if (!session) {
     return (
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <div className="flex-1 flex items-center justify-center px-4">
-          <Card className="w-full max-w-sm">
+      <SiteLayout title="Admin" noindex>
+        <div className="flex min-h-[60vh] items-center justify-center px-4 py-16">
+          <Card className="lux-card w-full max-w-sm">
             <CardContent className="p-6">
-              <h1 className="text-xl font-bold mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Admin Login</h1>
+              <h1 className="text-xl font-bold mb-4">Admin Login</h1>
               <form onSubmit={handleLogin} className="space-y-4">
                 <div>
                   <Label>Email</Label>
-                  <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                  <Input type="email" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </div>
                 <div>
                   <Label>Password</Label>
-                  <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                  <Input type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 </div>
                 {authError && <p className="text-sm text-destructive">{authError}</p>}
-                <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-                  {isSignUp ? "Sign Up" : "Sign In"}
+                <Button type="submit" className="w-full">
+                  Sign In
                 </Button>
-                <p className="text-sm text-center text-muted-foreground">
-                  {isSignUp ? "Already have an account?" : "First time?"}{" "}
-                  <button type="button" onClick={() => setIsSignUp(!isSignUp)} className="text-accent underline">
-                    {isSignUp ? "Sign In" : "Create Account"}
-                  </button>
+                <p className="text-xs text-center text-muted-foreground">
+                  Admin accounts are created in the Supabase dashboard.
                 </p>
               </form>
             </CardContent>
           </Card>
         </div>
-        <Footer />
-      </div>
+      </SiteLayout>
     );
   }
 
@@ -234,18 +220,17 @@ const Admin = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <div className="container mx-auto px-4 py-8 flex-1 max-w-5xl">
+    <SiteLayout title="Admin" noindex>
+      <div className="container max-w-5xl py-10">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+            <h1 className="text-2xl md:text-3xl font-bold">
               Manage Cars
             </h1>
             <p className="text-muted-foreground text-sm mt-1">Add, edit, and remove your car listings</p>
           </div>
           <div className="flex gap-2">
-            <Button onClick={() => { resetForm(); setShowForm(true); }} className="bg-accent text-accent-foreground hover:bg-accent/90">
+            <Button onClick={() => { resetForm(); setShowForm(true); }}>
               <Plus className="h-4 w-4 mr-2" /> Add Car
             </Button>
             <Button variant="outline" size="icon" onClick={handleLogout} title="Sign out">
@@ -259,7 +244,7 @@ const Admin = () => {
           <Card className="mb-8">
             <CardContent className="p-6 space-y-5">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                <h2 className="text-lg font-semibold">
                   {editing ? "Edit Car" : "Add New Car"}
                 </h2>
                 <Button variant="ghost" size="icon" onClick={resetForm}><X className="h-4 w-4" /></Button>
@@ -269,7 +254,7 @@ const Admin = () => {
                 <div><Label>Make *</Label><Input value={form.make} onChange={(e) => update("make", e.target.value)} placeholder="Toyota" /></div>
                 <div><Label>Model *</Label><Input value={form.model} onChange={(e) => update("model", e.target.value)} placeholder="Camry" /></div>
                 <div><Label>Year *</Label><Input type="number" value={form.year} onChange={(e) => update("year", e.target.value)} placeholder="2024" /></div>
-                <div><Label>Price *</Label><Input type="number" value={form.price} onChange={(e) => update("price", e.target.value)} placeholder="35000" /></div>
+                <div><Label>Price *</Label><Input type="number" value={form.price} onChange={(e) => update("price", e.target.value)} placeholder="650000" /></div>
                 <div><Label>Mileage</Label><Input type="number" value={form.mileage} onChange={(e) => update("mileage", e.target.value)} placeholder="15000" /></div>
                 <div><Label>Color</Label><Input value={form.color} onChange={(e) => update("color", e.target.value)} placeholder="Silver" /></div>
               </div>
@@ -315,7 +300,7 @@ const Admin = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div><Label>Seller Name</Label><Input value={form.seller_name} onChange={(e) => update("seller_name", e.target.value)} placeholder="John Doe" /></div>
-                <div><Label>Seller Phone</Label><Input value={form.seller_phone} onChange={(e) => update("seller_phone", e.target.value)} placeholder="(555) 000-0000" /></div>
+                <div><Label>Seller Phone</Label><Input value={form.seller_phone} onChange={(e) => update("seller_phone", e.target.value)} placeholder="98765 43210" /></div>
               </div>
 
               <div className="flex items-center gap-3">
@@ -350,7 +335,7 @@ const Admin = () => {
               </div>
 
               <div className="flex gap-3 pt-2">
-                <Button onClick={handleSubmit} disabled={addCar.isPending || updateCar.isPending} className="bg-accent text-accent-foreground hover:bg-accent/90">
+                <Button onClick={handleSubmit} disabled={addCar.isPending || updateCar.isPending}>
                   {editing ? "Update Car" : "Add Car"}
                 </Button>
                 <Button variant="outline" onClick={resetForm}>Cancel</Button>
@@ -376,7 +361,7 @@ const Admin = () => {
                     <img src={car.image} alt={`${car.make} ${car.model}`} className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold truncate" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                    <h3 className="font-semibold truncate">
                       {car.year} {car.make} {car.model}
                     </h3>
                     <p className="text-sm text-muted-foreground">
@@ -393,9 +378,10 @@ const Admin = () => {
             ))}
           </div>
         )}
+
+        <EnquiriesPanel />
       </div>
-      <Footer />
-    </div>
+    </SiteLayout>
   );
 };
 

@@ -1,303 +1,145 @@
-# EmailJS Email Integration Setup Guide
+# Email setup — form submissions → Autoflexiiii@gmail.com
 
-This guide explains how to set up email functionality for both service bookings and contact form submissions using EmailJS.
+Every form on the website emails the business inbox through **EmailJS** (free tier: 200 emails/month).
+Each submission gets a reference like `AFX-SPA-261008-7R3C` that the customer sees and that appears in the email subject.
 
-## Overview
+| Form | Page(s) | EmailJS template |
+|---|---|---|
+| Buy a Car | Home, /buy | `VITE_EMAILJS_CONTACT_TEMPLATE_ID` |
+| Sell Your Car (+ photos) | Home, /sell | `VITE_EMAILJS_CONTACT_TEMPLATE_ID` |
+| Contact | /contact | `VITE_EMAILJS_CONTACT_TEMPLATE_ID` |
+| Door-to-Door Car Spa | Home, /car-spa | `VITE_EMAILJS_BOOKING_TEMPLATE_ID` |
+| Inspectify booking | /inspectify | `VITE_EMAILJS_BOOKING_TEMPLATE_ID` |
 
-EmailJS handles two types of emails:
+Only **two** templates are needed — the same two the project already used. Your existing templates keep working with no changes; the new forms put their extra fields into `{{message}}` / `{{notes}}`.
 
-1. **Service Booking Emails** - When customers book a service
-   - Booking details are sent directly from the frontend to EmailJS
-   - EmailJS sends a formatted email to **Autoflexiiii@gmail.com**
+As a safety net, every submission is also saved to the Supabase `enquiries` table (after you apply the migration — see step 5), so a lead is never lost if an email fails. Admins can see them at `/admin` → *Recent enquiries*.
 
-2. **Contact Form Emails** - When customers submit the contact form
-   - Contact details are sent directly from the frontend to EmailJS
-   - EmailJS sends a formatted email to **Autoflexiiii@gmail.com**
+---
 
-Both confirmations are shown to the user after submission.
+## 1. Check the environment variables (most common problem)
 
-## Why EmailJS?
+The site **cannot send email without `VITE_EMAILJS_PUBLIC_KEY`**. When this audit was done, the local `.env` file did **not** contain any EmailJS keys — so emails will not send locally until you add them.
 
-- ✅ **Free**: 200 emails/month (perfect for small businesses)
-- ✅ **No backend needed**: Works directly from frontend
-- ✅ **Easy setup**: Takes 5 minutes
-- ✅ **Reliable**: Professional email delivery
+Add these to **`.env`** (local) **and** to **Vercel → Project → Settings → Environment Variables** (tick Production and Preview), then **redeploy** — Vite bakes them in at build time:
 
-## Step 1: Create EmailJS Account
+```
+VITE_EMAILJS_PUBLIC_KEY=xxxxxxxxxxxxxxx        # EmailJS → Account → General → Public Key
+VITE_EMAILJS_SERVICE_ID=service_xxxxxxx        # EmailJS → Email Services
+VITE_EMAILJS_BOOKING_TEMPLATE_ID=template_xxx  # EmailJS → Email Templates (booking)
+VITE_EMAILJS_CONTACT_TEMPLATE_ID=template_xxx  # EmailJS → Email Templates (contact)
+```
 
-1. Go to [EmailJS.com](https://www.emailjs.com/)
-2. Click "Sign Up" and create a free account
-3. Verify your email
+> If you previously set `VITE_EMAILJS_TEMPLATE_ID` in Vercel, it is not used — set the two template IDs above.
 
-## Step 2: Set Up Email Service
+## 2. Email service
 
-### Option A: Use Gmail (Recommended)
+EmailJS → **Email Services → Add Service → Gmail** → connect `Autoflexiiii@gmail.com`. Copy the Service ID.
 
-1. In EmailJS dashboard, go to **Email Services**
-2. Click **"Add Service"**
-3. Select **Gmail**
-4. Follow the instructions to connect your Gmail account
-5. Note the **Service ID** (e.g., `service_xxxxx`)
+## 3. Templates
 
-### Option B: Use Your Custom Email
+In each template's **Settings** tab:
 
-1. Go to **Email Services → Add Service**
-2. Select your email provider (Outlook, Custom SMTP, etc.)
-3. Configure accordingly
+* **To Email:** `{{to_email}}` (or just type `Autoflexiiii@gmail.com`)
+* **Reply To:** leave empty, or `{{reply_to}}`
+* **Subject:** see below
 
-## Step 3: Create Email Templates
+### Booking template (Car Spa + Inspectify)
 
-### Template 1: Service Booking Template (template_booking)
-
-1. In EmailJS dashboard, go to **Email Templates**
-2. Click **"Create New Template"**
-3. Name it: `template_booking`
-4. Use this template content:
+Subject: `{{subject}}`
 
 ```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <style>
-      body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-      .container { max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border-radius: 8px; }
-      .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px 8px 0 0; text-align: center; }
-      .content { background: white; padding: 20px; }
-      .section { margin-bottom: 20px; }
-      .section h3 { color: #667eea; margin-top: 0; }
-      .detail-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
-      .detail-label { font-weight: bold; color: #555; }
-      .detail-value { color: #333; }
-      .footer { background: #f5f5f5; padding: 15px; text-align: center; font-size: 12px; color: #666; border-radius: 0 0 8px 8px; }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="header">
-        <h1>🚗 Service Booking Confirmation</h1>
-        <p>Thank you for booking with AutoFlexxii!</p>
-      </div>
-      <div class="content">
-        <div class="section">
-          <h3>Booking Details</h3>
-          <div class="detail-row">
-            <span class="detail-label">Service Type:</span>
-            <span class="detail-value">{{service_name}}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Date:</span>
-            <span class="detail-value">{{booking_date}}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Time:</span>
-            <span class="detail-value">{{booking_time}}</span>
-          </div>
-        </div>
-
-        <div class="section">
-          <h3>Customer Information</h3>
-          <div class="detail-row">
-            <span class="detail-label">Name:</span>
-            <span class="detail-value">{{customer_name}}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Phone:</span>
-            <span class="detail-value">{{customer_phone}}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Email:</span>
-            <span class="detail-value">{{customer_email}}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Vehicle:</span>
-            <span class="detail-value">{{vehicle_info}}</span>
-          </div>
-        </div>
-
-        <div class="section">
-          <h3>Additional Notes</h3>
-          <p>{{notes}}</p>
-        </div>
-
-        <p style="color: #666; margin-top: 20px;">
-          Our team will contact you shortly to confirm your appointment.
-        </p>
-      </div>
-      <div class="footer">
-        <p>AutoFlexxii © 2026 | All rights reserved</p>
-      </div>
+<div style="background:#0a0a0b;padding:24px;font-family:Arial,sans-serif">
+  <div style="max-width:600px;margin:0 auto;background:#111113;border:1px solid #3a3122;border-radius:10px;overflow:hidden">
+    <div style="padding:20px 24px;border-bottom:1px solid #3a3122">
+      <div style="color:#c9a467;font-size:12px;letter-spacing:3px">AUTOFLEXII · NEW BOOKING</div>
+      <div style="color:#f2ede4;font-size:20px;margin-top:6px">{{service_name}}</div>
+      <div style="color:#9a8f7a;font-size:12px;margin-top:4px">Ref {{reference}}</div>
     </div>
-  </body>
-</html>
+    <table style="width:100%;border-collapse:collapse;font-size:14px">
+      <tr><td style="padding:10px 24px;color:#9a8f7a;width:140px">Date</td><td style="padding:10px 24px;color:#f2ede4">{{booking_date}}</td></tr>
+      <tr><td style="padding:10px 24px;color:#9a8f7a">Time</td><td style="padding:10px 24px;color:#f2ede4">{{booking_time}}</td></tr>
+      <tr><td style="padding:10px 24px;color:#9a8f7a">Name</td><td style="padding:10px 24px;color:#f2ede4">{{customer_name}}</td></tr>
+      <tr><td style="padding:10px 24px;color:#9a8f7a">Phone</td><td style="padding:10px 24px;color:#f2ede4">{{customer_phone}}</td></tr>
+      <tr><td style="padding:10px 24px;color:#9a8f7a">Email</td><td style="padding:10px 24px;color:#f2ede4">{{customer_email}}</td></tr>
+      <tr><td style="padding:10px 24px;color:#9a8f7a">Vehicle</td><td style="padding:10px 24px;color:#f2ede4">{{vehicle_info}}</td></tr>
+    </table>
+    <div style="padding:16px 24px 24px;color:#d8d2c6;font-size:13px;line-height:1.6">{{{notes_html}}}</div>
+  </div>
+</div>
 ```
 
-5. In the template:
-   - Set **To Email** to: `{{to_email}}`
-   - Set **Subject** to: `New Service Booking - {{service_name}}`
-   - Set **HTML** to the template above
-6. Click **Save**
-7. Copy the **Template ID** from the template settings (e.g., `template_booking`)
+### Contact template (Contact, Buy, Sell)
 
-### Template 2: Contact Form Template (template_contact)
-
-1. Create another new template
-2. Name it: `template_contact`
-3. Use this template content:
+Subject: `{{subject}}`
 
 ```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <style>
-      body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-      .container { max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border-radius: 8px; }
-      .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px 8px 0 0; text-align: center; }
-      .content { background: white; padding: 20px; }
-      .section { margin-bottom: 20px; }
-      .section h3 { color: #667eea; margin-top: 0; }
-      .detail-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
-      .detail-label { font-weight: bold; color: #555; width: 120px; }
-      .detail-value { color: #333; flex: 1; }
-      .message-box { background: #f5f5f5; padding: 12px; border-left: 4px solid #667eea; margin-top: 10px; }
-      .footer { background: #f5f5f5; padding: 15px; text-align: center; font-size: 12px; color: #666; border-radius: 0 0 8px 8px; }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="header">
-        <h1>📧 New Contact Form Submission</h1>
-        <p>You have a new message from your website</p>
-      </div>
-      <div class="content">
-        <div class="section">
-          <h3>Sender Information</h3>
-          <div class="detail-row">
-            <span class="detail-label">Name:</span>
-            <span class="detail-value">{{from_name}}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Email:</span>
-            <span class="detail-value">{{from_email}}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Phone:</span>
-            <span class="detail-value">{{phone}}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Subject:</span>
-            <span class="detail-value">{{subject}}</span>
-          </div>
-        </div>
-
-        <div class="section">
-          <h3>Message</h3>
-          <div class="message-box">{{message}}</div>
-        </div>
-
-        <p style="color: #666; margin-top: 20px; font-size: 12px;">
-          You can reply directly to this email to respond to the sender.
-        </p>
-      </div>
-      <div class="footer">
-        <p>AutoFlexxii © 2026 | All rights reserved</p>
-      </div>
+<div style="background:#0a0a0b;padding:24px;font-family:Arial,sans-serif">
+  <div style="max-width:600px;margin:0 auto;background:#111113;border:1px solid #3a3122;border-radius:10px;overflow:hidden">
+    <div style="padding:20px 24px;border-bottom:1px solid #3a3122">
+      <div style="color:#c9a467;font-size:12px;letter-spacing:3px">AUTOFLEXII · NEW ENQUIRY</div>
+      <div style="color:#f2ede4;font-size:18px;margin-top:6px">{{subject}}</div>
     </div>
-  </body>
-</html>
+    <table style="width:100%;border-collapse:collapse;font-size:14px">
+      <tr><td style="padding:10px 24px;color:#9a8f7a;width:140px">Name</td><td style="padding:10px 24px;color:#f2ede4">{{from_name}}</td></tr>
+      <tr><td style="padding:10px 24px;color:#9a8f7a">Phone</td><td style="padding:10px 24px;color:#f2ede4">{{phone}}</td></tr>
+      <tr><td style="padding:10px 24px;color:#9a8f7a">Email</td><td style="padding:10px 24px;color:#f2ede4">{{from_email}}</td></tr>
+    </table>
+    <div style="padding:16px 24px 24px;color:#d8d2c6;font-size:13px;line-height:1.6">{{{message_html}}}</div>
+  </div>
+</div>
 ```
 
-4. In the template:
-   - Set **To Email** to: `{{to_email}}`
-   - Set **Subject** to: `New Contact Form - {{subject}}`
-   - Set **HTML** to the template above
-5. Click **Save**
-6. Copy the **Template ID** (should be `template_contact`)
+`{{{triple braces}}}` render the pre-formatted details (one per line, HTML-escaped by the site).
+Old templates using `{{message}}` / `{{notes}}` still work — the details just appear on one line in some mail clients.
 
-## Step 4: Get Your Public Key
+### All variables sent
 
-1. Go to **Account → API Keys**
-2. Copy your **Public Key** (starts with something like `xxxxx`)
+* **Booking:** `to_email, reply_to, reference, subject, customer_name, customer_email, customer_phone, service_name, booking_date, booking_time, vehicle_info, notes, notes_html`
+* **Contact:** `to_email, reply_to, reference, subject, from_name, from_email, phone, message, message_html`
 
-## Step 5: Update Environment Variables
+## 4. Lock it down (recommended)
 
-1. Open (or create) `.env.local` in your project root
-2. Add these variables:
+EmailJS → **Account → Security**:
 
+* **Allowed origins / domains:** add your live domain(s) (e.g. `autoflexii.com`, `your-project.vercel.app`) so nobody can use your public key from another site.
+* Optionally enable **reCAPTCHA** and a monthly limit.
+
+The site already adds spam protection: a hidden honeypot field, a minimum fill time, a 30-second per-form cooldown, EmailJS headless-browser blocking and rate limiting.
+
+## 5. Supabase (enquiry backup + seller photos + admin security)
+
+Apply `supabase/migrations/20261008120000_production_hardening.sql` (either `supabase db push` or paste it into **Supabase → SQL Editor → Run**). It:
+
+* creates the `enquiries` table (visitors can insert only; admins can read),
+* creates the public `sell-requests` bucket for seller photos (photo links are included in the email),
+* restricts editing car listings and car photos to users in `admin_users` (previously **anyone who signed up** could edit or delete listings),
+* adds `Autoflexiiii@gmail.com` as an admin if that Supabase Auth user exists.
+
+To add another admin, run in the SQL editor:
+
+```sql
+insert into public.admin_users (user_id)
+select id from auth.users where lower(email) = lower('someone@example.com');
 ```
-VITE_EMAILJS_PUBLIC_KEY=your_public_key_here
-VITE_EMAILJS_SERVICE_ID=service_autoflexxii
-VITE_EMAILJS_TEMPLATE_ID=template_booking
-```
 
-Replace:
-- `your_public_key_here` with your EmailJS Public Key
-- `service_autoflexxii` with your Service ID if different
-- `template_booking` with your Template ID if different
+Admin sign-up on the website has been removed — create admin users in **Supabase → Authentication → Users → Add user**.
 
-## Step 6: Test It
+## 6. Test
 
-1. Start your dev server:
-   ```bash
-   npm run dev
-   ```
-
-2. Test **Service Booking**:
-   - Go to `/service`
-   - Book a service and check if the email arrives at **Autoflexiiii@gmail.com**
-
-3. Test **Contact Form**:
-   - Go to `/contact`
-   - Fill out and submit the contact form
-   - Verify the email arrives at **Autoflexiiii@gmail.com**
+1. `npm run dev` → open http://localhost:8080
+2. Submit each form (Home: Buy / Sell / Car Spa; /inspectify; /contact).
+3. You should see a green "Request received!" toast with a reference number, and the email in `Autoflexiiii@gmail.com` within a minute (check Spam the first time and mark *Not spam*).
+4. In the browser console (F12) a warning `VITE_EMAILJS_PUBLIC_KEY is not set` means step 1 is missing.
 
 ## Troubleshooting
 
-### Issue: "EmailJS is not configured"
-
-- Check that `.env.local` has `VITE_EMAILJS_PUBLIC_KEY` set
-- Restart the dev server after adding environment variables
-
-### Issue: Email not received
-
-1. Check your spam/junk folder
-2. Verify the recipient email is correct: `Autoflexiiii@gmail.com`
-3. Check EmailJS dashboard for failed requests
-4. Verify Service ID and Template ID match your setup
-
-### Issue: "Service/Template not found"
-
-- Verify Service ID and Template ID in `.env.local`
-- Check EmailJS dashboard to confirm they exist
-- Use the exact IDs from your account
-- Make sure template names are exactly: `template_booking` and `template_contact`
-
-### Issue: Variables show as "{{variable_name}}" in email
-
-- Make sure all template variables are spelled correctly and match the code
-- Service booking variables: `to_email`, `customer_name`, `customer_email`, `customer_phone`, `service_name`, `booking_date`, `booking_time`, `vehicle_info`, `notes`
-- Contact form variables: `to_email`, `from_name`, `from_email`, `phone`, `subject`, `message`
-
-## Free Tier Limits
-
-- **200 emails/month**: Perfect for small businesses
-- No credit card required
-- Upgrade anytime if you need more
-
-## Production Deployment (Vercel)
-
-1. Add environment variables in Vercel dashboard:
-   - Go to your project settings
-   - Add Environment Variables:
-     - `VITE_EMAILJS_PUBLIC_KEY`
-     - `VITE_EMAILJS_SERVICE_ID`
-     - `VITE_EMAILJS_TEMPLATE_ID`
-
-2. Redeploy your site
-
-## Support
-
-- EmailJS docs: https://www.emailjs.com/docs/
-- Email template variables: https://www.emailjs.com/docs/user-guide/dynamic-content/
-
+| Symptom | Fix |
+|---|---|
+| Red toast "We couldn't send your request right now" | EmailJS keys missing/wrong **and** the Supabase migration isn't applied. Check the console for `EmailJS 4xx:` details. |
+| `EmailJS 400: The Public Key is invalid` | Wrong `VITE_EMAILJS_PUBLIC_KEY`; redeploy after fixing. |
+| `EmailJS 400: The service ID / template ID not found` | IDs don't match the dashboard. |
+| `EmailJS 403` | Request blocked by an EmailJS security setting — usually the domain isn't in *Allowed origins*. |
+| `EmailJS 429` / quota message | Rate limit or monthly quota reached — wait or upgrade the EmailJS plan. |
+| Works locally, not on Vercel | Variables not added in Vercel, or not redeployed after adding. |
+| Seller photos missing from email | Apply the Supabase migration (creates the `sell-requests` bucket). |

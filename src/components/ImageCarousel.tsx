@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 interface ImageCarouselProps {
@@ -29,7 +28,7 @@ export function ImageCarousel({ images, carName, featured }: ImageCarouselProps)
   return (
     <div className="space-y-4">
       {/* Main Image */}
-      <div className="relative rounded-2xl overflow-hidden bg-muted">
+      <div className="relative overflow-hidden rounded-xl border border-gold/20 bg-black">
         <div className="aspect-[16/9] relative">
           <img
             src={currentImage}
@@ -38,9 +37,9 @@ export function ImageCarousel({ images, carName, featured }: ImageCarouselProps)
             loading="eager"
           />
           {featured && (
-            <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground border-0">
+            <span className="absolute left-4 top-4 rounded-full bg-gold-gradient px-3 py-1 text-[10px] font-bold uppercase tracking-wide2 text-primary-foreground">
               Featured
-            </Badge>
+            </span>
           )}
 
           {/* Navigation Arrows */}
@@ -51,6 +50,7 @@ export function ImageCarousel({ images, carName, featured }: ImageCarouselProps)
                 size="icon"
                 className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full"
                 onClick={goToPrevious}
+                aria-label="Previous photo"
               >
                 <ChevronLeft className="h-6 w-6" />
               </Button>
@@ -59,6 +59,7 @@ export function ImageCarousel({ images, carName, featured }: ImageCarouselProps)
                 size="icon"
                 className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full"
                 onClick={goToNext}
+                aria-label="Next photo"
               >
                 <ChevronRight className="h-6 w-6" />
               </Button>
@@ -79,16 +80,19 @@ export function ImageCarousel({ images, carName, featured }: ImageCarouselProps)
             <button
               key={index}
               onClick={() => goToImage(index)}
+              aria-label={`Show photo ${index + 1}`}
+              aria-current={currentIndex === index}
               className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
                 currentIndex === index
-                  ? "border-accent ring-2 ring-accent/50"
-                  : "border-border hover:border-accent/50"
+                  ? "border-gold ring-2 ring-gold/40"
+                  : "border-white/10 hover:border-gold/50"
               }`}
             >
               <img
                 src={image}
                 alt={`${carName} ${index + 1}`}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover"
+                loading="lazy"
               />
             </button>
           ))}

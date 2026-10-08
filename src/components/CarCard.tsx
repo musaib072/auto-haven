@@ -1,45 +1,62 @@
 import { Link } from "react-router-dom";
-import { MapPin, Gauge, Fuel, Calendar } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { MapPin, Gauge, Fuel, Cog } from "lucide-react";
 import type { Car } from "@/data/cars";
 
 export function CarCard({ car }: { car: Car }) {
+  const name = `${car.year} ${car.make} ${car.model}`;
   return (
-    <Link to={`/car/${car.id}`}>
-      <Card className="group overflow-hidden border-border/60 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-accent/40">
-        <div className="relative aspect-[16/10] overflow-hidden">
-          <img
-            src={car.image}
-            alt={`${car.year} ${car.make} ${car.model}`}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
-          />
-          {car.featured && (
-            <Badge className="absolute top-3 left-3 bg-accent text-accent-foreground border-0 text-xs font-semibold">
-              Featured
-            </Badge>
-          )}
-          <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-black/60 to-transparent" />
-          <p className="absolute bottom-3 right-3 text-white font-bold text-xl" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            ₹{car.price.toLocaleString('en-IN')}
-          </p>
+    <Link
+      to={`/car/${car.id}`}
+      className="lux-card lux-card-hover group block overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
+    >
+      <div className="relative aspect-[16/10] overflow-hidden bg-black">
+        <img
+          src={car.image}
+          alt={name}
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          loading="lazy"
+          decoding="async"
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).src = "/placeholder.svg";
+          }}
+        />
+        {car.featured && (
+          <span className="absolute left-3 top-3 rounded-full bg-gold-gradient px-3 py-1 text-[10px] font-bold uppercase tracking-wide2 text-primary-foreground">
+            Featured
+          </span>
+        )}
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/85 to-transparent" />
+        <p className="absolute bottom-3 right-4 font-display text-xl font-bold text-gold-light">₹{car.price.toLocaleString("en-IN")}</p>
+      </div>
+      <div className="space-y-3 p-5">
+        <div>
+          <h3 className="font-display text-base font-semibold leading-tight text-foreground">{name}</h3>
+          {car.color && <p className="mt-0.5 text-xs text-muted-foreground">{car.color}</p>}
         </div>
-        <CardContent className="p-4 space-y-3">
-          <div>
-            <h3 className="font-semibold text-base leading-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-              {car.year} {car.make} {car.model}
-            </h3>
-            <p className="text-xs text-muted-foreground mt-0.5">{car.color}</p>
-          </div>
-          <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1.5"><Gauge className="h-3.5 w-3.5" />{car.mileage.toLocaleString('en-IN')} km</span>
-            <span className="flex items-center gap-1.5"><Fuel className="h-3.5 w-3.5" />{car.fuelType}</span>
-            <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{car.transmission}</span>
-            <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" />{car.location.split(",")[0]}</span>
-          </div>
-        </CardContent>
-      </Card>
+        <div className="grid grid-cols-2 gap-2 text-xs text-foreground/70">
+          <span className="flex items-center gap-1.5"><Gauge className="h-3.5 w-3.5 text-gold" />{car.mileage.toLocaleString("en-IN")} km</span>
+          <span className="flex items-center gap-1.5"><Fuel className="h-3.5 w-3.5 text-gold" />{car.fuelType}</span>
+          <span className="flex items-center gap-1.5"><Cog className="h-3.5 w-3.5 text-gold" />{car.transmission}</span>
+          {car.location && <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5 text-gold" />{car.location.split(",")[0]}</span>}
+        </div>
+      </div>
     </Link>
+  );
+}
+
+export function CarCardSkeleton() {
+  return (
+    <div className="lux-card overflow-hidden" aria-hidden="true">
+      <div className="aspect-[16/10] animate-pulse bg-white/5" />
+      <div className="space-y-3 p-5">
+        <div className="h-4 w-2/3 animate-pulse rounded bg-white/10" />
+        <div className="h-3 w-1/3 animate-pulse rounded bg-white/5" />
+        <div className="grid grid-cols-2 gap-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="h-3 animate-pulse rounded bg-white/5" />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
