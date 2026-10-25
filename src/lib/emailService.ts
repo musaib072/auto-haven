@@ -21,10 +21,13 @@ const env = import.meta.env;
 
 const EMAILJS_PUBLIC_KEY = (env.VITE_EMAILJS_PUBLIC_KEY as string | undefined)?.trim() || "";
 const EMAILJS_SERVICE_ID = (env.VITE_EMAILJS_SERVICE_ID as string | undefined)?.trim() || "service_autoflexxii";
+// Older deployments only define a single VITE_EMAILJS_TEMPLATE_ID — use it for every form
+// when the specific booking/contact template IDs are not set.
+const EMAILJS_LEGACY_TEMPLATE_ID = (env.VITE_EMAILJS_TEMPLATE_ID as string | undefined)?.trim() || "";
 const EMAILJS_BOOKING_TEMPLATE_ID =
-  (env.VITE_EMAILJS_BOOKING_TEMPLATE_ID as string | undefined)?.trim() || "template_booking";
+  (env.VITE_EMAILJS_BOOKING_TEMPLATE_ID as string | undefined)?.trim() || EMAILJS_LEGACY_TEMPLATE_ID || "template_booking";
 const EMAILJS_CONTACT_TEMPLATE_ID =
-  (env.VITE_EMAILJS_CONTACT_TEMPLATE_ID as string | undefined)?.trim() || "template_contact";
+  (env.VITE_EMAILJS_CONTACT_TEMPLATE_ID as string | undefined)?.trim() || EMAILJS_LEGACY_TEMPLATE_ID || "template_contact";
 const RECIPIENT = (env.VITE_ENQUIRY_RECIPIENT as string | undefined)?.trim() || site.email;
 
 export const isEmailConfigured = EMAILJS_PUBLIC_KEY.length > 0;
@@ -196,43 +199,36 @@ export async function submitEnquiry(enquiry: Enquiry): Promise<EnquiryResult> {
     .filter(Boolean)
     .join("\n\n") + photoLines;
 
-  let templateId: string;
-  let params: Record<string, string>;
-  let subject: string;
+  const booking = isBooking(enquiry);
+  const subject = booking
+    ? `${kindLabel} – ${enquiry.serviceName} [${reference}]`
+    : `${kindLabel} – ${clean(enquiry.subject, 120)} [${reference}]`;
+  const templateId = booking ? EMAILJS_BOOKING_TEMPLATE_ID : EMAILJS_CONTACT_TEMPLATE_ID;
 
-  if (isBooking(enquiry)) {
-    subject = `${kindLabel} – ${enquiry.serviceName} [${reference}]`;
-    templateId = EMAILJS_BOOKING_TEMPLATE_ID;
-    params = {
-      to_email: RECIPIENT,
-      reply_to: email || RECIPIENT,
-      reference,
-      subject,
-      customer_name: name,
-      customer_email: email || "Not provided",
-      customer_phone: phone,
-      service_name: `${enquiry.serviceName} (${kindLabel})`,
-      booking_date: clean(enquiry.date, 60),
-      booking_time: clean(enquiry.time, 30),
-      vehicle_info: clean(enquiry.vehicle, 200),
-      notes: body,
-      notes_html: toHtml(body),
-    };
-  } else {
-    subject = `${kindLabel} – ${clean(enquiry.subject, 120)} [${reference}]`;
-    templateId = EMAILJS_CONTACT_TEMPLATE_ID;
-    params = {
-      to_email: RECIPIENT,
-      reply_to: email || RECIPIENT,
-      reference,
-      from_name: name,
-      from_email: email || "Not provided",
-      phone,
-      subject,
-      message: body,
-      message_html: toHtml(body),
-    };
-  }
+  // Every email carries BOTH variable sets (booking-style and contact-style), so any
+  // template — including a single shared one — renders the customer's details.
+  const params: Record<string, string> = {
+    to_email: RECIPIENT,
+    reply_to: email || RECIPIENT,
+    reference,
+    subject,
+    // booking-template variables
+    customer_name: name,
+    customer_email: email || "Not provided",
+    customer_phone: phone,
+    service_name: booking ? `${enquiry.serviceName} (${kindLabel})` : kindLabel,
+    booking_date: booking ? clean(enquiry.date, 60) : "—",
+    booking_time: booking ? clean(enquiry.time, 30) : "—",
+    vehicle_info: booking ? clean(enquiry.vehicle, 200) : "—",
+    notes: body,
+    notes_html: toHtml(body),
+    // contact-template variables
+    from_name: name,
+    from_email: email || "Not provided",
+    phone,
+    message: body,
+    message_html: toHtml(body),
+  };
 
   let emailStatus: "sent" | "failed" | "not_configured" = "not_configured";
   let emailError = "EmailJS public key missing";

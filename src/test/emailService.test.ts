@@ -110,3 +110,33 @@ describe("submitEnquiry", () => {
     expect(insert.mock.calls[0][0].email_status).toBe("not_configured");
   });
 });
+
+describe("legacy single template", () => {
+  it("falls back to VITE_EMAILJS_TEMPLATE_ID for every form and sends both variable sets", async () => {
+    send.mockResolvedValue({ status: 200, text: "OK" });
+    insert.mockResolvedValue({ error: null });
+    const { submitEnquiry } = await load({
+      VITE_EMAILJS_PUBLIC_KEY: "pk",
+      VITE_EMAILJS_TEMPLATE_ID: "template_shared",
+      VITE_EMAILJS_BOOKING_TEMPLATE_ID: "",
+      VITE_EMAILJS_CONTACT_TEMPLATE_ID: "",
+    });
+    await submitEnquiry({
+      kind: "car-spa",
+      serviceName: "Complete Car Spa",
+      date: "Sunday, 11 October 2026",
+      time: "05:00 PM",
+      vehicle: "SUV",
+      name: "Priya",
+      phone: "9527806955",
+      details: [],
+    });
+    await submitEnquiry({ kind: "contact", subject: "Hi", name: "Amit", phone: "8956967660", details: [], message: "Hello there" });
+    expect(send.mock.calls.map((c) => c[1])).toEqual(["template_shared", "template_shared"]);
+    const [, , bookingParams] = send.mock.calls[0];
+    expect(bookingParams).toMatchObject({ customer_name: "Priya", from_name: "Priya", phone: "9527806955", booking_time: "05:00 PM" });
+    const [, , contactParams] = send.mock.calls[1];
+    expect(contactParams).toMatchObject({ from_name: "Amit", customer_name: "Amit", customer_phone: "8956967660" });
+    expect(contactParams.message).toContain("Hello there");
+  });
+});

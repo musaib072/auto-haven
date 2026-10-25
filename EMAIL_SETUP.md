@@ -30,7 +30,7 @@ VITE_EMAILJS_BOOKING_TEMPLATE_ID=template_xxx  # EmailJS → Email Templates (bo
 VITE_EMAILJS_CONTACT_TEMPLATE_ID=template_xxx  # EmailJS → Email Templates (contact)
 ```
 
-> If you previously set `VITE_EMAILJS_TEMPLATE_ID` in Vercel, it is not used — set the two template IDs above.
+> Using just one EmailJS template? You can set only `VITE_EMAILJS_TEMPLATE_ID` instead — every form will use it. Each email carries both the booking-style (`customer_name`, `customer_phone`, `booking_date`…) and contact-style (`from_name`, `phone`, `message`…) variables, so either template layout shows the customer's details.
 
 ## 2. Email service
 
